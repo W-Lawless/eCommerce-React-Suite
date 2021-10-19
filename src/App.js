@@ -3,32 +3,29 @@ import './App.css';
 import { Home } from './pages/home/home.component';
 import { Switch, Route } from 'react-router-dom';
 import { auth, createUserProfileDocument } from './firebase/firebase.util'
-
+import { connect } from 'react-redux'
 
 import Header from './components/header/header.component'
 // import { RippleAPI } from 'ripple-lib';
 import ShopPage from './pages/shop/shop.component';
 import AuthPage from './pages/auth/auth.component'
 
-class  App extends React.Component {
-  constructor() {
-    super();
+import { setCurrentUser } from './redux/user/user.actions'
 
-    this.state = {
-      currentUser: null
-    }
-  }
+class  App extends React.Component {
 
   unsubscribeFromAuth = null 
   
   componentDidMount() {
+    const { setCurrentUser } = this.props  
+    
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
       
       if(user) {
         const userDocument = await createUserProfileDocument(user);
 
         userDocument.onSnapshot(snapshot =>{
-          this.setState({
+          setCurrentUser({
             currentUser: {
               id: snapshot.id,
               ...snapshot.data()
@@ -37,7 +34,7 @@ class  App extends React.Component {
         })
       }
       
-      this.setState({currentUser: user})
+      setCurrentUser(user)
     })
   }
 
@@ -47,7 +44,7 @@ class  App extends React.Component {
 
   render() { return (
     <div>
-      <Header currentUser={this.state.currentUser} />
+      <Header />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path='/shop' component={ShopPage} />
@@ -160,5 +157,8 @@ class  App extends React.Component {
 // });
 
 
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
 
-export default App;
+export default  connect(null, mapDispatchToProps)(App)
