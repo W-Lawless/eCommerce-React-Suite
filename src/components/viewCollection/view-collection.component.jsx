@@ -9,9 +9,9 @@ const viewCollection = ( { title, items } ) => {
             {
                 items
                 .filter((item,idx) => idx < 4)
-                .map(({id, ...itemProps}) => (
+                .map((item) => (
                      
-                    <CollectionItem key={id} {...itemProps} >  </CollectionItem>
+                    <CollectionItem key={item.id} item={item} >  </CollectionItem>
                 
                     )
                 ) 
