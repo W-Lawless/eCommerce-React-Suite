@@ -9,7 +9,8 @@ import { createStructuredSelector } from 'reselect';
 import Header from './components/header/header.component'
 // import { RippleAPI } from 'ripple-lib';
 import ShopPage from './pages/shop/shop.component';
-import AuthPage from './pages/auth/auth.component'
+import AuthPage from './pages/auth/auth.component';
+import CheckoutPage from './pages/checkout/checkout.component';
 
 import { setCurrentUser } from './redux/user/user.actions'
 import { selectCurrentUser } from './redux/user/user.selectors'
@@ -50,7 +51,8 @@ class  App extends React.Component {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path='/shop' component={ShopPage} />
-        <Route path='/auth' render={() =>  
+        <Route exact path='/checkout' component={CheckoutPage} />
+        <Route exact path='/auth' render={() =>  
           this.props.currentUser ? ( <Redirect to='/' />) : (<AuthPage />) 
         } />
       </Switch>
@@ -58,7 +60,15 @@ class  App extends React.Component {
   ); }
 }
 
+const mapStateToProps =  createStructuredSelector({
+  currentUser: selectCurrentUser
+})
 
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default  connect(mapStateToProps, mapDispatchToProps)(App)
 
 
 
@@ -159,13 +169,3 @@ class  App extends React.Component {
 //   }
 
 // });
-
-const mapStateToProps =  createStructuredSelector({
-  currentUser: selectCurrentUser
-})
-
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-})
-
-export default  connect(mapStateToProps, mapDispatchToProps)(App)
