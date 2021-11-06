@@ -4,7 +4,7 @@ import './view-component.style.scss'
 
 const viewCollection = ( { title, items } ) => {
     return (<div className="collection">
-        <h1 className="title"> { title.toUpperCase() } </h1>
+        <h1 className="title"> { title } </h1>
         <div className="body">
             {
                 items
